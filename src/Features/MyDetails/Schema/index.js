@@ -1,16 +1,8 @@
 import * as yup from "yup";
 
-const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
-
-const lower = new RegExp("(?=.*[a-z])");
-const upper = new RegExp("(?=.*[A-Z])");
-const number = new RegExp("(?=.*[0-9])");
-const length = new RegExp("(?=.{8,})");
-
-export const loginSchema = yup.object().shape({
-	email: yup
+export const myDetailsSchema = yup.object().shape({
+	first_name: yup
 		.string()
-		.email("Please enter a valid email")
 		.required("Please enter your email"),
 	password: yup
 		.string()

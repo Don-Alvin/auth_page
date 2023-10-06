@@ -12,13 +12,6 @@ export const registerSchema = yup.object().shape({
 		.string()
 		.email("Please enter a valid email")
 		.required("Please enter your email"),
-	confirm_email: yup
-		.string()
-		.email()
-		.required("Please confirm your email")
-		.oneOf([yup.ref("email")], "Your emails do not match"),
-	first_name: yup.string().min(3).required("Please enter your first name"),
-	last_name: yup.string().min(3).required("Please enter your last name"),
 	password: yup
 		.string()
 		.matches(lower, { message: "Password must include small letter" })

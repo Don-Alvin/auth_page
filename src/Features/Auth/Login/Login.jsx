@@ -1,26 +1,39 @@
-import React, { useState } from 'react'
-import { loginSchema } from './Schemas'
 import { useFormik } from 'formik'
-import { BsFillLockFill, BsFillPersonFill, BsFillTelephoneFill } from 'react-icons/bs'
-import { MdLocationOn, MdOutlineMailOutline } from "react-icons/md"
+import { BsFillLockFill } from 'react-icons/bs'
+import { MdOutlineMailOutline } from "react-icons/md"
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { loginSchema } from './Schemas'
+import { loginUser } from '../authSlice'
 
 const Login = () => {
 
-    const [isDisabled, setIsDisabled] = useState(false)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const onSubmit = () => {
+        try {
+            dispatch(loginUser(values.email, values.password))
+            
+        } catch (error) {
+            alert(error.message)
+        }
+    }
 
     const {values, errors, handleChange, handleSubmit, touched, isSubmitting, handleBlur} = useFormik({
         initialValues: {
             email: "",
             password: "",
         },
-        validationSchema: loginSchema
+        validationSchema: loginSchema,
+        onSubmit
     })
 
   return (
-    <section className='flex'>
-        <article className='p-10  flex flex-col gap-5 items-start justify-center'>
-            <h5>Log in into your account</h5>
-            <form className='w-full grid gap-3'>
+    <section className='flex justify-center items-center h-screen'>
+        <article className='p-10  flex flex-col gap-5 items-center justify-center'>
+            <h5 className='text-xl text-center'>Log in into your account</h5>
+            <form className='w-full grid gap-3' onSubmit={handleSubmit}>
                 <div className='grid gap-5'>
                     <div className=''>
                         <label htmlFor='email'>Email Address</label>
@@ -59,7 +72,8 @@ const Login = () => {
                         {errors.password && touched.password && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.password}</p>}
                     </div>
                 </div>
-               <button className={`text-white text-center h-11 ${isDisabled && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} type='submit'>Continue</button>
+                <p>Don't have an account yet? <Link to='/register' className='text-semibold text-[#be123c]'>Register</Link></p>
+               <button className={`text-white text-center h-11 ${(isSubmitting) && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} type='submit'disabled={isSubmitting}>Log in</button>
             </form>
         </article>
     </section>

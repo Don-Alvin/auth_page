@@ -1,26 +1,50 @@
-import React, { useState } from 'react'
 import { registerSchema } from './Schemas'
 import { useFormik } from 'formik'
-import { BsBriefcaseFill, BsFillLockFill, BsFillPersonFill, BsFillTelephoneFill } from 'react-icons/bs'
-import { MdLocationOn, MdOutlineMailOutline } from "react-icons/md"
+import { BsFillLockFill } from 'react-icons/bs'
+import { MdOutlineMailOutline } from "react-icons/md"
+import { Link, useNavigate } from 'react-router-dom'
+import { registerUser } from '../authSlice'
+import { useDispatch } from 'react-redux'
 
 const Register = () => {
 
-    const [isDisabled, setIsDisabled] = useState(false)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const onSubmit = async () => {
+        try {
+            await register(values.email, values.password);
+            navigate('/');
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    const register = async (email, password) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await dispatch(registerUser({ email, password }));
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+    };
 
     const {values, errors, handleChange, handleSubmit, touched, isSubmitting, handleBlur} = useFormik({
         initialValues: {
             email: "",
             password: ""
         },
-        validationSchema: registerSchema
+        validationSchema: registerSchema,
+        onSubmit
     })
 
   return (
-    <section className='flex'>
+    <section className='flex h-screen justify-center items-center'>
     <article className='p-10  flex flex-col gap-5 items-start justify-center'>
-        <h5>Create Account</h5>
-        <form className='w-full grid gap-3'>
+        <h5 className='text-xl text-center'>Create an account</h5>
+        <form className='w-full grid gap-3' onSubmit={handleSubmit}>
             <div className='grid gap-5'>
                 <div className=''>
                     <label htmlFor='email'>Email Address</label>
@@ -59,7 +83,8 @@ const Register = () => {
                     {errors.password && touched.password && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.password}</p>}
                 </div>
             </div>
-           <button className={`text-white text-center h-11 ${isDisabled && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} type='submit'>Continue</button>
+            <p>Already have an account ? <Link className='font-semibold text-[#be123c]' to='/'>Log in</Link></p>
+           <button className={`text-white text-center h-11 ${(isSubmitting) && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} type='submit'>Register</button>
         </form>
     </article>
 </section>
