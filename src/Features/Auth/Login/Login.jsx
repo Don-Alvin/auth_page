@@ -11,9 +11,9 @@ const Login = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         try {
-            dispatch(loginUser(values.email, values.password))
+            await dispatch(loginUser(values.email, values.password))
             
         } catch (error) {
             alert(error.message)

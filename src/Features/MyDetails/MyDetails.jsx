@@ -1,12 +1,9 @@
 import { useFormik } from 'formik'
-import { useState } from 'react'
 import { BsBriefcaseFill, BsFillPersonFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdInsertPhoto, MdLocationOn } from 'react-icons/md'
 import { myDetailsSchema } from './Schema'
 
 const MyDetails = () => {
-    const [isDisabled, setIsDisabled] = useState(false)
-
     const {values, errors, handleChange, handleSubmit, touched, isSubmitting, handleBlur} = useFormik({
         initialValues: {
             phone_number: "",
@@ -20,7 +17,7 @@ const MyDetails = () => {
             home_ward: "",
             home_village: "",
             photo_url: "",
-            any_other: ""
+            other_info: ""
         },
         validationSchema: myDetailsSchema
     })
@@ -29,7 +26,7 @@ const MyDetails = () => {
     <section className='flex'>
         <article className='p-10 w-full flex flex-col gap-5 items-start justify-center'>
             <h5>My Details</h5>
-            <form className='w-full grid gap-3'>
+            <form className='w-full grid gap-3' onSubmit={handleSubmit}>
                 <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5 w-full'>
                     <div className=''>
                         <label htmlFor='first_name'>First name</label>
@@ -190,7 +187,7 @@ const MyDetails = () => {
                     <div className=''>
                         <label htmlFor='home_village'>Home village</label>
                         <div
-                            className={`${errors.home_village && touched.home_village ? `border-[#E71807]` : `border-gray-500`} border border-solid rounded-md p-2 flex items-center gap-2`}
+                            className={ `border border-solid border-gray-500 rounded-md p-2 flex items-center gap-2`}
                         >
                             <MdLocationOn className='text-gray-700 h-4 w-6' />
                             <input
@@ -203,12 +200,11 @@ const MyDetails = () => {
                                 placeholder='Enter your home location'
                             />
                         </div>
-                        {errors.home_village && touched.home_village && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.home_village}</p>}
                     </div>
                     <div className=''>
                         <label htmlFor='photo'>Upload photo</label>
                         <div
-                            className={`${errors.photo && touched.photo ? `border-[#E71807]` : `border-gray-500`} border border-solid rounded-md p-2 flex items-center gap-2`}
+                            className={`border-gray-500 border border-solid rounded-md p-2 flex items-center gap-2`}
                         >
                             <MdInsertPhoto className='text-gray-700 h-4 w-6' />
                             <input
@@ -221,28 +217,26 @@ const MyDetails = () => {
                                 placeholder='Enter your home location'
                             />
                         </div>
-                        {errors.name && touched.name && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.name}</p>}
                     </div>
                     <div className=''>
-                        <label htmlFor='any_other'>Any other information</label>
+                        <label htmlFor='other_info'>Any other information</label>
                         <div
-                            className={`${errors.any_other && touched.any_other ? `border-[#E71807]` : `border-gray-500`} border border-solid rounded-md p-2 flex items-center gap-2`}
+                            className={`border-gray-500 border border-solid rounded-md p-2 flex items-center gap-2`}
                         >
                             <textarea
                                 className='outline-none w-full p-1'
-                                id='any_other'
+                                id='other_info'
                                 rows={1}
-                                value={values.any_other}
+                                value={values.other_info}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 placeholder='Enter any other info'
                             >
                             </textarea>
                         </div>
-                        {errors.name && touched.name && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.name}</p>}
                 </div>
                 </div>
-               <button className={`text-white text-center h-11 ${isDisabled && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} type='submit'>Continue</button>
+               <button className={`text-white text-center h-11 ${isSubmitting && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} disabled={isSubmitting} type='submit'>Continue</button>
             </form>
         </article>
     </section>

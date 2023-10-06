@@ -10,13 +10,22 @@ export const myDetailsSchema = yup.object().shape({
     phone_number: yup
 		.string()
 		.required("Please enter your your phone number"),
-    second: yup
+    gender: yup
 		.string()
-		.required("Please enter your email"),
-    first_name: yup
+		.required("Please select your gender"),
+    age_bracket: yup
 		.string()
-		.required("Please enter your email"),
-    first_name: yup
+		.required("Please select your age bracket"),
+    professional: yup
 		.string()
-		.required("Please enter your email"),
+		.required("Please enter your profession"),
+    current_location: yup
+		.string()
+		.required("Please enter your current location"),
+    home_sub_county: yup
+		.string()
+		.required("Please enter your home sub county"),
+    home_ward: yup
+		.string()
+		.required("Please enter your home ward"),    
 });

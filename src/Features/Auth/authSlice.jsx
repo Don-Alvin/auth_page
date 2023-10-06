@@ -7,7 +7,7 @@ const initialState = {
     loading: false,
 }
 
-export const registerUser = createAsyncThunk('registeruser', async(body) => {
+export const registerUser = createAsyncThunk('registeruser', async (body) => {
     const res = await fetch('http://139.162.70.139:8045/auth/users', {
         method: 'POST',
         headers: {
