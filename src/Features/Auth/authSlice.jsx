@@ -66,13 +66,13 @@ const authSlice = createSlice({
         [loginUser.pending]:(state, action) => {
             state.loading = true
         },
-        [loginUser.fulfilled]: (state, {payload: {error, msg, token, user}} )=> {
+        [loginUser.fulfilled]: (state, {payload: {error, access_token, user}} )=> {
             state.loading = false
             if(error){
                 state.error = error
             }else {
-                state.msg = msg,
-                state.token = token,
+                state.msg = user.msg,
+                state.token = access_token,
                 state.user = user
 
                 localStorage.setItem('msg', msg)

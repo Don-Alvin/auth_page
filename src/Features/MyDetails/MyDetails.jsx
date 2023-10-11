@@ -236,7 +236,7 @@ const MyDetails = () => {
                         </div>
                 </div>
                 </div>
-               <button className={`text-white text-center h-11 ${isSubmitting && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} disabled={isSubmitting} type='submit'>Continue</button>
+               <button className={`text-white text-center h-11 ${isSubmitting && `opacity-50`} bg-[rgb(14,141,69)] shadow-md rounded-md`} disabled={isSubmitting} type='submit'>Continue</button>
             </form>
         </article>
     </section>

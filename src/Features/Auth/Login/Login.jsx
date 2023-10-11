@@ -4,7 +4,7 @@ import { MdOutlineMailOutline } from "react-icons/md"
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginSchema } from './Schemas'
-import { loginUser } from '../authSlice'
+import { addToken, addUser, loginUser } from '../authSlice'
 
 const Login = () => {
 
@@ -24,6 +24,8 @@ const Login = () => {
         return new Promise(async (resolve, reject) => {
             try {
                 await dispatch(loginUser({ email, password }));
+                dispatch(addToken())
+                dispatch(addUser())
                 resolve();
             } catch (error) {
                 reject(error);

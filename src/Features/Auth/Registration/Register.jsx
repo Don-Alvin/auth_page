@@ -14,7 +14,7 @@ const Register = () => {
     const onSubmit = async () => {
         try {
             await register(values.email, values.password);
-            navigate('/');
+            navigate('/:id');
         } catch (error) {
             alert(error.message);
         }
