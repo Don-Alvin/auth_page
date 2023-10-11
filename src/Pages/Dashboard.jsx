@@ -7,10 +7,10 @@ const Dashboard = () => {
 
   return (
     <section>
-      <header className='p-6 bg-[#be123c] shadow sticky'>
+      <header className='p-6 bg-[rgb(14,141,69)] shadow sticky'>
         <nav className='flex justify-between items-center'>
           <div>
-            <p className='text-white'>Welcome</p>
+            <p className='text-white'>Hello</p>
             <datetime className='text-white'>{date}</datetime>
           </div>
           <form className='h-10 border bg-white flex items-center px-2 py-1 rounded-md w-[40%] shadow'>
@@ -49,7 +49,7 @@ const Dashboard = () => {
               <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>West ward</td>
               <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Doe Village</td>
               <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>
-                <Link> View profile</Link>
+                <Link to='/:id' className='font-semibold underline'> View profile</Link>
               </td>
             </tr>
           </tbody>

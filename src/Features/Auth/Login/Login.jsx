@@ -13,12 +13,23 @@ const Login = () => {
 
     const onSubmit = async () => {
         try {
-            await dispatch(loginUser(values.email, values.password))
-            
+            await login(values.email, values.password);
+            navigate('/welcome');
         } catch (error) {
-            alert(error.message)
+            alert(error.message);
         }
-    }
+    };
+
+    const login = async (email, password) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await dispatch(loginUser({ email, password }));
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+    };
 
     const {values, errors, handleChange, handleSubmit, touched, isSubmitting, handleBlur} = useFormik({
         initialValues: {
@@ -72,8 +83,8 @@ const Login = () => {
                         {errors.password && touched.password && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.password}</p>}
                     </div>
                 </div>
-                <p>Don't have an account yet? <Link to='/register' className='text-semibold text-[#be123c]'>Register</Link></p>
-               <button className={`text-white text-center h-11 ${(isSubmitting) && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} type='submit'disabled={isSubmitting}>Log in</button>
+                <p>Don't have an account yet? <Link to='/register' className='text-semibold text-[rgb(14,141,69)]'>Register</Link></p>
+               <button className={`text-white text-center h-11 ${(isSubmitting) && `opacity-50`} bg-[rgb(14,141,69)] shadow-md rounded-md`} type='submit'disabled={isSubmitting}>Log in</button>
             </form>
         </article>
     </section>

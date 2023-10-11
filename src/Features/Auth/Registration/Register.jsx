@@ -83,8 +83,8 @@ const Register = () => {
                     {errors.password && touched.password && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.password}</p>}
                 </div>
             </div>
-            <p>Already have an account ? <Link className='font-semibold text-[#be123c]' to='/'>Log in</Link></p>
-           <button className={`text-white text-center h-11 ${(isSubmitting) && `opacity-50`} bg-[#ff7b7b] shadow-md rounded-md`} type='submit'>Register</button>
+            <p>Already have an account ? <Link className='font-semibold text-[rgb(14,141,69)]' to='/login'>Log in</Link></p>
+           <button className={`text-white text-center h-11 ${(isSubmitting) && `opacity-50`} bg-[rgb(14,141,69)] shadow-md rounded-md`} type='submit'>Register</button>
         </form>
     </article>
 </section>

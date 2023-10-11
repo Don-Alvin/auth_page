@@ -4,14 +4,18 @@ import Register from './Features/Auth/Registration/Register'
 import MyDetails from './Features/MyDetails/MyDetails'
 import Dashboard from './Pages/Dashboard'
 import ErrorPage from './Pages/ErrorPage'
+import Profile from './Pages/Profile'
+import Welcome from './Pages/Welcome'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path='/' element={<Login />} />
+      <Route path='/' element={<Welcome />} />
+      <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
       <Route path='/mydetails' element={<MyDetails />} />
       <Route path='/dashboard' element={<Dashboard />} />
+      <Route path='/:id' element={<Profile />} />
       <Route path='*' element={<ErrorPage />} />
     </Route>
   )
