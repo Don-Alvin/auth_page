@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const BASE_URL = 'http://139.162.70.139:8045/auth/users';
+const BASE_URL = 'https://139.162.70.139:445/auth/users';
 
 const initialState = {
     msg: "",
