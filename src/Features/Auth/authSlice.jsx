@@ -1,92 +1,90 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+const BASE_URL = 'https://139.162.70.139:445/auth/users';
 
 const initialState = {
     msg: "",
     user: "",
     token: "",
     loading: false,
-}
+    error: null,
+};
 
-export const registerUser = createAsyncThunk('registeruser', async (body) => {
-    const res = await fetch('http://139.162.70.139:8045/auth/users', {
+const fetchData = async (endpoint, body) => {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(body)
-    })
-    return await res.json()
-})
+    });
+    return await response.json();
+};
 
-export const loginUser = createAsyncThunk('registeruser', async(body) => {
-    const res = await fetch('http://139.162.70.139:8045/auth/users/login', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-    })
-    return await res.json()
-})
+export const registerUser = createAsyncThunk('registerUser', async (body) => {
+    return fetchData('/', body);
+});
+
+export const loginUser = createAsyncThunk('loginUser', async (body) => {
+    return fetchData('/login', body);
+});
 
 const authSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
         addToken: (state, action) => {
-            state.token = localStorage.getItem('token')
+            state.token = localStorage.getItem('token');
         },
         addUser: (state, action) => {
-            state.user = localStorage.getItem('user')
+            state.user = localStorage.getItem('user');
         },
         logout: (state, action) => {
-            state.token = null
-            localStorage.clear()
-        }
+            state.token = null;
+            localStorage.clear();
+        },
     },
-    extraReducers: {
-        // Register User
-        [registerUser.pending]:(state, action) => {
-            state.loading = true
-        },
-        [registerUser.fulfilled]: (state, {payload: {error, msg}} )=> {
-            state.loading = false
-            if(error){
-                state.error = error
-            }else {
-                state.msg = msg
-            }
-        },
+    extraReducers: (builder) => {
+        builder
+            .addCase(registerUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(registerUser.fulfilled, (state, { payload: { error, msg } }) => {
+                state.loading = false;
+                if (error) {
+                    state.error = error;
+                } else {
+                    state.msg = msg;
+                }
+            })
+            .addCase(registerUser.rejected, (state) => {
+                state.loading = false;
+                state.error = "Failed to register.";
+            })
+            .addCase(loginUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(loginUser.fulfilled, (state, { payload: { error, access_token, user } }) => {
+                state.loading = false;
+                if (error) {
+                    state.error = error;
+                } else {
+                    state.msg = user.msg;
+                    state.token = access_token;
+                    state.user = user;
 
-        [registerUser.rejected]: (state, action) => {
-            state.loading = true
-        },
-
-        // Log in User
-        [loginUser.pending]:(state, action) => {
-            state.loading = true
-        },
-        [loginUser.fulfilled]: (state, {payload: {error, access_token, user}} )=> {
-            state.loading = false
-            if(error){
-                state.error = error
-            }else {
-                state.msg = user.msg,
-                state.token = access_token,
-                state.user = user
-
-                localStorage.setItem('msg', msg)
-                localStorage.setItem('user', JSON.stringify)
-                localStorage.setItem("token", token)
-            }
-        },
-
-        [loginUser.rejected]: (state, action) => {
-            state.loading = true
-        }
+                    localStorage.setItem('msg', user.msg);
+                    localStorage.setItem('user', JSON.stringify(user));
+                    localStorage.setItem("token", access_token);
+                }
+            })
+            .addCase(loginUser.rejected, (state) => {
+                state.loading = false;
+                state.error = "Failed to login.";
+            });
     }
-})
+});
 
-export const { addToken, addUser, logout } = authSlice.actions
+export const { addToken, addUser, logout } = authSlice.actions;
 
-export default authSlice.reducer
+export default authSlice.reducer;
