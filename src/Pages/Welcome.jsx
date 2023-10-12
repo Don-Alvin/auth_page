@@ -23,7 +23,7 @@ const Welcome = () => {
             </header>
             <main className='flex flex-col gap-6 items-center'>
                 {user ? (
-                    <div className='flex flex-col items-center gap-2'>
+                    <div className='flex flex-col items-center gap-6'>
                       <div className='flex gap-3'>
                        <Link to={`/${user.id}`} className='text-[rgb(14,141,69)] rounded bg-white p-2  flex justify-center'>
                             <span className=''>View your profile</span>
@@ -40,7 +40,7 @@ const Welcome = () => {
                     </div>
                     
                 ): (
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center gap-6'>
                        <h3 className='text-xl font-semibold text-center'>Log in into your account to view and update your profile</h3>
                         <Link to='/login' className='text-[rgb(14,141,69)]  rounded bg-white p-2 md:w-[40%] flex justify-center'>
                             <span className=''>Log in</span>
