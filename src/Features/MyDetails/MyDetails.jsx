@@ -1,9 +1,49 @@
 import { useFormik } from 'formik'
 import { BsBriefcaseFill, BsFillPersonFill, BsFillTelephoneFill } from 'react-icons/bs'
 import { MdInsertPhoto, MdLocationOn } from 'react-icons/md'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 import { myDetailsSchema } from './Schema'
+import axios from '../../apis/axios'
+import useAuth from '../Auth/hooks/useAuth'
+
+
+const details_url = '/users/userdata'
 
 const MyDetails = () => {
+
+    const { auth } = useAuth()
+    const user = auth.user
+    const navigate = useNavigate()
+
+    const onSubmit = async() => {
+        try {
+            const response = await axios.post(details_url, {
+                user_id: user.id,
+                first_name: values.first_name,
+                last_name: values.last_name,
+                phone_number: values.phone_number,
+                gender: values.gender,
+                age_bracket: values.age_bracket,
+                professional: values.professional,
+                current_location: values.current_location,
+                home_sub_county: values.home_sub_county,
+                home_ward: values.home_ward,
+                home_village: values.home_village,
+                photo_url: values.photo_url,
+                other_info: values.other_info
+            },
+            {
+             headers: {'Content-Type': 'application/json'}   
+            }
+            )
+            toast.success("Your data has successfully been updated")
+            navigate('/')
+            
+        } catch (error) {
+            
+        }
+    }
     const {values, errors, handleChange, handleSubmit, touched, isSubmitting, handleBlur} = useFormik({
         initialValues: {
             phone_number: "",
@@ -19,7 +59,8 @@ const MyDetails = () => {
             photo_url: "",
             other_info: ""
         },
-        validationSchema: myDetailsSchema
+        validationSchema: myDetailsSchema,
+        onSubmit
     })
 
   return (
@@ -65,33 +106,38 @@ const MyDetails = () => {
                         {errors.last_name && touched.last_name && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.last_name}</p>}
                     </div>
                     <div className=''>
-                        <label htmlFor='number'>Phone number</label>
+                        <label htmlFor='phone_number'>Phone number</label>
                         <div
-                            className={`${errors.number && touched.number ? `border-[#E71807]` : `border-gray-500`} border border-solid rounded-md p-2 flex items-center gap-2`}
+                            className={`${errors.phone_number && touched.phone_number ? `border-[#E71807]` : `border-gray-500`} border border-solid rounded-md p-2 flex items-center gap-2`}
                         >
                             <BsFillTelephoneFill className='text-gray-700 h-4 w-6' />
                             <input
                                 className='outline-none w-full'
                                 type='tel'
-                                id='number'
-                                value={values.number}
+                                id='phone_number'
+                                value={values.phone_number}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 placeholder='Enter your phone number'
                             />
                         </div>
-                        {errors.number && touched.number && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.number}</p>}
+                        {errors.phone_number && touched.phone_number && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.phone_number}</p>}
                     </div>
                     <div className=''>
                         <label htmlFor='gender'>Gender</label>
                         <div
                             className={`${errors.gender && touched.gender ? `border-[#E71807]` : `border-gray-500`} border border-solid rounded-md p-2 flex items-center gap-2`}
                         >
-                            <select className='w-full bg-white'>
+                            <select 
+                                className='w-full bg-white outline-none'
+                                id='gender'
+                                value={values.gender}
+                                onChange={handleChange}
+                            >
                                 <option className='text-gray-500'>Select gender</option>
-                                <option className='text-gray-500' value="male">Male</option>
-                                <option className='text-gray-500' value="female">Female</option>
-                                <option className='text-gray-500' value="prefer_not_to_say">Prefer not to say</option>
+                                <option className='text-gray-500' value="Male">Male</option>
+                                <option className='text-gray-500' value="Female">Female</option>
+                                <option className='text-gray-500' value="other">Other</option>
                             </select>
                         </div>
                         {errors.gender && touched.gender && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.gender}</p>}
@@ -101,13 +147,18 @@ const MyDetails = () => {
                         <div
                             className={`${errors.age_bracket && touched.age_bracket ? `border-[#E71807]` : `border-gray-500`} border border-solid rounded-md p-2 flex items-center gap-2`}
                         >
-                           <select className='w-full bg-white'>
+                           <select 
+                             className='w-full bg-white outline-none'
+                             id='age_bracket'
+                             value={values.age_bracket}
+                             onChange={handleChange}
+                           >
                                 <option className='text-gray-500'>Select age bracket</option>
                                 <option className='text-gray-500' value="18-25">18-25</option>
-                                <option className='text-gray-500' value="26-35">26-35</option>
-                                <option className='text-gray-500' value="36-45">36-45 </option>
+                                <option className='text-gray-500' value="25-35">25-35</option>
+                                <option className='text-gray-500' value="35-45">35-45 </option>
                                 <option className='text-gray-500' value="45-60">46-60 </option>
-                                <option className='text-gray-500' value="above_60">Above 60 </option>
+                                <option className='text-gray-500' value="above 60">Above 60 </option>
                             </select> 
                         </div>
                         {errors.age_bracket && touched.age_bracket && <p className='text-white mt-5 text-center p-2 bg-[#E71807] rounded'>{errors.age_bracket}</p>}
@@ -202,7 +253,7 @@ const MyDetails = () => {
                         </div>
                     </div>
                     <div className=''>
-                        <label htmlFor='photo'>Upload photo</label>
+                        <label htmlFor='photo_url'>Upload photo</label>
                         <div
                             className={`border-gray-500 border border-solid rounded-md p-2 flex items-center gap-2`}
                         >
@@ -210,8 +261,8 @@ const MyDetails = () => {
                             <input
                                 className='outline-none w-full'
                                 type='file'
-                                id='photo'
-                                value={values.photo}
+                                id='photo_url'
+                                value={values.photo_url}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 placeholder='Enter your home location'
@@ -236,7 +287,7 @@ const MyDetails = () => {
                         </div>
                 </div>
                 </div>
-               <button className={`text-white text-center h-11 ${isSubmitting && `opacity-50`} bg-[rgb(14,141,69)] shadow-md rounded-md`} disabled={isSubmitting} type='submit'>Continue</button>
+               <button className={`text-white text-center h-11 ${isSubmitting && `opacity-50`} bg-[rgb(14,141,69)] shadow-md rounded-md`} disabled={isSubmitting} type='submit'>Create details</button>
             </form>
         </article>
     </section>
