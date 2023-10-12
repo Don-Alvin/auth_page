@@ -1,4 +1,6 @@
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 import Login from './Features/Auth/Login/Login'
 import Register from './Features/Auth/Registration/Register'
 import MyDetails from './Features/MyDetails/MyDetails'
@@ -31,6 +33,18 @@ const App = () => {
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" 
+      />
       
     </>
   )

@@ -5,6 +5,7 @@ import { MdOutlineMailOutline } from "react-icons/md"
 import { Link, useNavigate } from 'react-router-dom'
 import { registerSchema } from './Schemas'
 import axios from '../../../apis/axios'
+import { toast } from 'react-toastify'
 
 const register_URL = '/auth/users'
 
@@ -19,6 +20,7 @@ const Register = () => {
                     headers: {'Content-Type': 'application/json'},
                 }
             )
+            toast.success(response.data.user.message)
             navigate('/login');
         } catch (error) {
             if(error?.response?.status === 500){

@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { loginSchema } from './Schemas'
 import axios from '../../../apis/axios'
 import useAuth from '../hooks/useAuth'
+import { toast } from 'react-toastify'
 
 
 
@@ -29,7 +30,7 @@ const Login = () => {
             const access_token = response?.data?.access_token
             const user = response?.data?.user
             const refresh_token = response?.data?.refresh_token
-
+            toast.success(response.data.user.message)
             navigate('/')
 
             setAuth({user, access_token, refresh_token})
