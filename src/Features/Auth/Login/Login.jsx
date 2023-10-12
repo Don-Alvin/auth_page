@@ -27,13 +27,12 @@ const Login = () => {
                     headers: {"Content-Type": "application/json"}
                 }
             )
-            const access_token = response?.data?.access_token
             const user = response?.data?.user
             const refresh_token = response?.data?.refresh_token
+            localStorage.setItem('refreshToken', refresh_token)
+            localStorage.setItem('user', JSON.stringify(user))
             toast.success(response.data.user.message)
             navigate('/')
-
-            setAuth({user, access_token, refresh_token})
         } catch (error) {
             setErrorMsg('Login failed. Check if you have the right email and password')
         }
