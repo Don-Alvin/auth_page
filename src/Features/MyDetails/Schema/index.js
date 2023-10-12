@@ -3,10 +3,10 @@ import * as yup from "yup";
 export const myDetailsSchema = yup.object().shape({
 	first_name: yup
 		.string()
-		.required("Please enter your first"),
-    second_name: yup
+		.required("Please enter your first name"),
+    last_name: yup
 		.string()
-		.required("Please enter your second name"),
+		.required("Please enter your last name"),
     phone_number: yup
 		.string()
 		.required("Please enter your your phone number"),

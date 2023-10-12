@@ -6,6 +6,8 @@ import Dashboard from './Pages/Dashboard'
 import ErrorPage from './Pages/ErrorPage'
 import Profile from './Pages/Profile'
 import Welcome from './Pages/Welcome'
+import { AuthProvider } from './context/AuthContext'
+import RequireAuth from './Features/Auth/RequireAuth'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -13,9 +15,11 @@ const router = createBrowserRouter(
       <Route path='/' element={<Welcome />} />
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
-      <Route path='/mydetails' element={<MyDetails />} />
-      <Route path='/dashboard' element={<Dashboard />} />
-      <Route path='/:id' element={<Profile />} />
+      <Route element={<RequireAuth />}>
+        <Route path='/mydetails' element={<MyDetails />} />
+        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/:id' element={<Profile />} />
+      </Route>
       <Route path='*' element={<ErrorPage />} />
     </Route>
   )
@@ -24,7 +28,10 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+      
     </>
   )
 }

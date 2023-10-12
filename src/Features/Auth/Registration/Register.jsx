@@ -1,34 +1,30 @@
-import { registerSchema } from './Schemas'
+import { useState } from 'react'
 import { useFormik } from 'formik'
 import { BsFillLockFill } from 'react-icons/bs'
 import { MdOutlineMailOutline } from "react-icons/md"
 import { Link, useNavigate } from 'react-router-dom'
-import { registerUser } from '../authSlice'
-import { useDispatch } from 'react-redux'
+import { registerSchema } from './Schemas'
+import axios from '../../../apis/axios'
+
+const register_URL = '/auth/users'
 
 const Register = () => {
-
-    const dispatch = useDispatch()
+    const [errorMsg, setErrorMsg] = useState(null)
     const navigate = useNavigate()
 
     const onSubmit = async () => {
         try {
-            await register(values.email, values.password);
-            navigate('/:id');
+            const response = await axios.post(register_URL, 
+                JSON.stringify({email: values.email, password: values.password}), {
+                    headers: {'Content-Type': 'application/json'},
+                }
+            )
+            navigate('/login');
         } catch (error) {
-            alert(error.message);
+            if(error?.response?.status === 500){
+                setErrorMsg('Registration failed')
+            } else setErrorMsg('User already exists')
         }
-    };
-
-    const register = async (email, password) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await dispatch(registerUser({ email, password }));
-                resolve();
-            } catch (error) {
-                reject(error);
-            }
-        });
     };
 
     const {values, errors, handleChange, handleSubmit, touched, isSubmitting, handleBlur} = useFormik({
@@ -43,6 +39,11 @@ const Register = () => {
   return (
     <section className='flex h-screen justify-center items-center'>
     <article className='p-10  flex flex-col gap-5 items-start justify-center'>
+        {errorMsg && (
+        <div className='bg-[#e71807] p-2 rounded'>
+            <p className='text-white'>{errorMsg}</p>
+        </div> 
+        )}
         <h5 className='text-xl text-center'>Create an account</h5>
         <form className='w-full grid gap-3' onSubmit={handleSubmit}>
             <div className='grid gap-5'>

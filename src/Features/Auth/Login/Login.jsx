@@ -1,36 +1,41 @@
+import { useState } from 'react'
 import { useFormik } from 'formik'
 import { BsFillLockFill } from 'react-icons/bs'
 import { MdOutlineMailOutline } from "react-icons/md"
-import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginSchema } from './Schemas'
-import { addToken, addUser, loginUser } from '../authSlice'
+import axios from '../../../apis/axios'
+import useAuth from '../hooks/useAuth'
+
+
+
+const login_url = '/auth/users/login'
 
 const Login = () => {
+    const [errorMsg, setErrorMsg] = useState(null)
 
-    const dispatch = useDispatch()
+    const { setAuth } = useAuth()
+
     const navigate = useNavigate()
 
     const onSubmit = async () => {
         try {
-            await login(values.email, values.password);
-            navigate('/welcome');
-        } catch (error) {
-            alert(error.message);
-        }
-    };
+            const response = await axios.post(login_url, 
+                {email: values.email, password: values.password},
+                {
+                    headers: {"Content-Type": "application/json"}
+                }
+            )
+            const access_token = response?.data?.access_token
+            const user = response?.data?.user
+            const refresh_token = response?.data?.refresh_token
 
-    const login = async (email, password) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await dispatch(loginUser({ email, password }));
-                dispatch(addToken())
-                dispatch(addUser())
-                resolve();
-            } catch (error) {
-                reject(error);
-            }
-        });
+            navigate('/')
+
+            setAuth({user, access_token, refresh_token})
+        } catch (error) {
+            setErrorMsg('Login failed. Check if you have the right email and password')
+        }
     };
 
     const {values, errors, handleChange, handleSubmit, touched, isSubmitting, handleBlur} = useFormik({
@@ -45,6 +50,11 @@ const Login = () => {
   return (
     <section className='flex justify-center items-center h-screen'>
         <article className='p-10  flex flex-col gap-5 items-center justify-center'>
+        {errorMsg && (
+        <div className='bg-[#e71807] p-2 rounded'>
+            <p className='text-white'>{errorMsg}</p>
+        </div> 
+        )}
             <h5 className='text-xl text-center'>Log in into your account</h5>
             <form className='w-full grid gap-3' onSubmit={handleSubmit}>
                 <div className='grid gap-5'>
