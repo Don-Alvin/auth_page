@@ -13,7 +13,7 @@ const details_url = '/users/userdata'
 const MyDetails = () => {
 
     const { auth } = useAuth()
-    const user = auth.user
+    const user = auth
     const navigate = useNavigate()
 
     const onSubmit = async() => {

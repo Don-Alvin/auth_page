@@ -1,7 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import  useUsers  from '../Features/Users/hooks/useUsers'
 
 const Profile = () => {
+  const { id } = useParams()
+
+  const {users, error, isLoading, isError } = useUsers()
+
+  const user = users.filter(user => user.id === Number(id))
+  console.log(user);
+
   return (
     <section className='p-10 flex justify-center'>
       <div className='flex flex-col gap-6 shadow p-6 rounded-lg'>

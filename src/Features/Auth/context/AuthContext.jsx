@@ -8,7 +8,7 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
        const user = JSON.parse(localStorage.getItem("user"))
         setAuth(user) 
-    }, [auth])
+    }, [setAuth])
     
 
     return (

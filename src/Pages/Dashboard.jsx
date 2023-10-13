@@ -1,26 +1,32 @@
 import React from 'react'
 import { MdSearch } from 'react-icons/md'
+import useUsers from '../Features/Users/hooks/useUsers'
+import { BeatLoader } from 'react-spinners'
+import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
+import useSearch from '../hooks/useSearch'
 
 const Dashboard = () => {
-  const date = new Date().toUTCString().slice(5, 16)
 
-  return (
-    <section>
-      <header className='p-6 bg-[rgb(14,141,69)] shadow sticky'>
-        <nav className='flex justify-between items-center'>
-          <div>
-            <p className='text-white'>Hello</p>
-            <datetime className='text-white'>{date}</datetime>
-          </div>
-          <form className='h-10 border bg-white flex items-center px-2 py-1 rounded-md w-[40%] shadow'>
-            <MdSearch className='w-6 h-6 text-gray-400' />
-            <input className='outline-none w-full' type='search' placeholder='Search by profession, name, home ward' />
-          </form>
-        </nav>
-      </header>
-      <article className='p-6'>
-        <table className='border border-solid w-full p-2'>
+  const {searchWord, setSearchWord } = useSearch()
+  const date = new Date().toUTCString().slice(5, 16)
+  const { users, isLoading, isError, error } = useUsers()
+  
+  let content;
+
+  if (isLoading) content = <BeatLoader color='rgb(14,141,69)' />
+  if (isError) toast.error(error)
+
+  const renderedUsers = users.filter(user => {
+    return Object.values(user).some(value =>
+      typeof value === 'string' && value.includes(searchWord)
+    );
+  });
+  
+
+  if(renderedUsers) {
+    content = (
+      <table className='border border-solid w-full p-2'>
           <thead className='border border-solid'>
             <tr>
               <th className='border border-solid p-1 border-gray-300 text-gray-700 font-bold'>First name</th>
@@ -37,24 +43,54 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Mkombozi</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Sindani</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>0752468781</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Male</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>18-25</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Software Engineer</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Nairobi</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Westland</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>West ward</td>
-              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>Doe Village</td>
+            {renderedUsers.map(user => (
+            <tr key={user.id}>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.first_name}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.last_name}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.phone_number}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.gender}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.age_bracket}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.professional}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.current_location}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.home_sub_county}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.home_ward}</td>
+              <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.home_village}</td>
               <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>
-                <Link to='/:id' className='font-semibold underline'> View profile</Link>
+                <Link to={`/${user.id}`} className='font-semibold underline'> View profile</Link>
               </td>
             </tr>
+            ))}
           </tbody>
         </table>
+    )
+  } else if (!isLoading && !isError) {
+    content = <p>No user available</p>
+  }
+
+  return (
+    <section>
+      <header className='p-6 bg-[rgb(14,141,69)] shadow sticky'>
+        <nav className='flex justify-between items-center'>
+          <div>
+            <p className='text-white'>Hello</p>
+            <time dateTime={date} className='text-white'>{date}</time>
+          </div>
+          <div className='h-10 border bg-white flex items-center px-2 py-1 rounded-md w-[40%] shadow'>
+            <MdSearch className='w-6 h-6 text-gray-400' />
+            <input
+              className='outline-none w-full' 
+              type='search' 
+              placeholder='Search by profession, name, home ward'
+              onChange={(e) => setSearchWord(e.target.value)}
+              value={searchWord}
+            />
+          </div>
+        </nav>
+      </header>
+      <article className='p-2'>
+      {content}
       </article>
+      
     </section>
   )
 }

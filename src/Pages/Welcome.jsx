@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Background from '../Components/Background'
 import { Link } from 'react-router-dom'
 import useAuth from '../Features/Auth/hooks/useAuth'
 
 const Welcome = () => {
-    const { setAuth } = useAuth()
+    const {auth, setAuth } = useAuth()
 
-    let user = localStorage.getItem('user')
+    useEffect(() => {
+        setAuth(localStorage.getItem('user'))
+    },[])
+
+    let user = JSON.parse(localStorage.getItem('user'))
+    
 
     const handleLogout = () => {
         localStorage.removeItem('refreshToken')

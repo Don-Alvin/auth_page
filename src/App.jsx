@@ -8,8 +8,11 @@ import Dashboard from './Pages/Dashboard'
 import ErrorPage from './Pages/ErrorPage'
 import Profile from './Pages/Profile'
 import Welcome from './Pages/Welcome'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './Features/Auth/context/AuthContext'
 import RequireAuth from './Features/Auth/RequireAuth'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { SearchContextProvider } from './context/SearchContext'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,25 +30,38 @@ const router = createBrowserRouter(
   )
 )
 
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0
+    }
+  }
+})
+
 const App = () => {
   return (
     <>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored" 
-      />
-      
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        <AuthProvider>
+          <SearchContextProvider>
+           <RouterProvider router={router} /> 
+          </SearchContextProvider>
+        </AuthProvider>
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored" 
+        />
+      </QueryClientProvider>
     </>
   )
 }
