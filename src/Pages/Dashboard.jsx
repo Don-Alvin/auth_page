@@ -15,16 +15,14 @@ const Dashboard = () => {
   let content;
 
   if (isLoading) content = <BeatLoader color='rgb(14,141,69)' />
-  if (isError) toast.error(error)
+  if (isError) toast.error(error) 
 
-  const renderedUsers = users.filter(user => {
-    return Object.values(user).some(value =>
-      typeof value === 'string' && value.includes(searchWord)
-    );
-  });
-  
-
-  if(renderedUsers) {
+  if(users) {
+    const renderedUsers = users?.filter(user => {
+      return Object.values(user).some(value =>
+        typeof value === 'string' && value.includes(searchWord)
+      );
+    });
     content = (
       <table className='border border-solid w-full p-2'>
           <thead className='border border-solid'>
@@ -42,9 +40,9 @@ const Dashboard = () => {
               <th className='border border-solid p-1 border-gray-300 text-gray-700 font-bold'>Profile</th>
             </tr>
           </thead>
-          <tbody>
-            {renderedUsers.map(user => (
-            <tr key={user.id}>
+          {renderedUsers.map(user => (
+          <tbody key={user.id}>
+            <tr>
               <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.first_name}</td>
               <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.last_name}</td>
               <td className='border border-solid border-gray-300 text-center p-1 text-gray-700'>{user.phone_number}</td>
@@ -59,8 +57,8 @@ const Dashboard = () => {
                 <Link to={`/${user.id}`} className='font-semibold underline'> View profile</Link>
               </td>
             </tr>
-            ))}
           </tbody>
+          ))}
         </table>
     )
   } else if (!isLoading && !isError) {
